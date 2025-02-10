@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.xterm {
+  height: 100%;
+  padding: 0.5rem;
+}
+
+.xterm-viewport {
+  overflow-y: auto !important;
+}
+
+/* Ensure terminal container has proper dimensions */
+#root {
+  height: 100vh;
+}
