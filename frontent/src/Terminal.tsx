@@ -6,6 +6,7 @@ import 'xterm/css/xterm.css';
 
 interface TerminalRef {
   clear: () => void;
+  sendCommand: (command: string) => void;
 }
 
 const Terminal = forwardRef<TerminalRef>((props, ref) => {
@@ -18,6 +19,11 @@ const Terminal = forwardRef<TerminalRef>((props, ref) => {
     clear: () => {
       if (xtermRef.current) {
         xtermRef.current.clear();
+      }
+    },
+    sendCommand: (command: string) => {
+      if (socketRef.current?.readyState === WebSocket.OPEN) {
+        socketRef.current.send(command + "\n");
       }
     }
   }));
@@ -40,12 +46,12 @@ const Terminal = forwardRef<TerminalRef>((props, ref) => {
 
     const fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
-    
+
     xtermRef.current = term;
     fitAddonRef.current = fitAddon;
 
     term.open(terminalRef.current);
-    
+
     // Connect to WebSocket
     const socket = new WebSocket('ws://' + window.location.host + '/ws');
     socketRef.current = socket;
